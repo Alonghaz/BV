@@ -19,7 +19,6 @@ if (AppConfiguration.googleServicesAvailable) {
     apply(plugin = gradleLibs.plugins.google.services.get().pluginId)
 }
 
-
 val signingProp = file(project.rootProject.file("signing.properties"))
 
 android {
@@ -68,37 +67,34 @@ android {
         }
     }
 
-buildTypes {
-    release {
-        isMinifyEnabled = true
-        proguardFiles(
-            getDefaultProguardFile("proguard-android-optimize.txt"),
-            "proguard-rules.pro"
-        )
-        // release 块内
-if (signingProp.exists()) {
-    signingConfig = signingConfigs.getByName("release")
-}
-        configure<CrashlyticsExtension> {
-            mappingFileUploadEnabled = AppConfiguration.googleServicesAvailable
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            if (signingProp.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = AppConfiguration.googleServicesAvailable
+            }
         }
-    }
-    debug {
-        isMinifyEnabled = false
-        proguardFiles(
-            getDefaultProguardFile("proguard-android-optimize.txt"),
-            "proguard-rules.pro"
-        )
-        applicationIdSuffix = ".debug"
-        // debug 块内
-if (signingProp.exists()) {
-    signingConfig = signingConfigs.getByName("debug")
-}
-        configure<CrashlyticsExtension> {
-            mappingFileUploadEnabled = false
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            applicationIdSuffix = ".debug"
+            if (signingProp.exists()) {
+                signingConfig = signingConfigs.getByName("debug")
+            }
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = false
+            }
         }
-    }
-}
         create("r8Test") {
             isMinifyEnabled = true
             proguardFiles(
@@ -123,6 +119,7 @@ if (signingProp.exists()) {
             }
         }
     }
+
     // https://issuetracker.google.com/issues/260059413
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
