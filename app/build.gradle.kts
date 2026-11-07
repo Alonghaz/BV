@@ -75,9 +75,10 @@ buildTypes {
             getDefaultProguardFile("proguard-android-optimize.txt"),
             "proguard-rules.pro"
         )
-        if (signingProp.exists()) {
-            signingConfig = signingConfigs.getByName("release")
-        }
+        // release 块内
+if (signingProp.exists()) {
+    signingConfig = signingConfigs.getByName("release")
+}
         configure<CrashlyticsExtension> {
             mappingFileUploadEnabled = AppConfiguration.googleServicesAvailable
         }
@@ -89,9 +90,10 @@ buildTypes {
             "proguard-rules.pro"
         )
         applicationIdSuffix = ".debug"
-        if (signingProp.exists()) {
-            signingConfig = signingConfigs.getByName("debug")
-        }
+        // debug 块内
+if (signingProp.exists()) {
+    signingConfig = signingConfigs.getByName("debug")
+}
         configure<CrashlyticsExtension> {
             mappingFileUploadEnabled = false
         }
