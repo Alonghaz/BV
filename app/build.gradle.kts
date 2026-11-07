@@ -68,18 +68,20 @@ android {
         }
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+buildTypes {
+    release {
+        isMinifyEnabled = true
+        if (signingProp.exists()) {
             signingConfig = signingConfigs.getByName("release")
-            configure<CrashlyticsExtension> {
-                mappingFileUploadEnabled = AppConfiguration.googleServicesAvailable
-            }
         }
+    }
+    debug {
+        isMinifyEnabled = false
+        if (signingProp.exists()) {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
+}
         debug {
             isMinifyEnabled = false
             proguardFiles(
