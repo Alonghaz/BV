@@ -20,12 +20,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Write google-services.json
+            - name: Write google-services.json (optional)
         env:
           DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        if: ${{ secrets.GOOGLE_SERVICES_JSON != '' }}
         run: |
-          echo "$DATA" > app/google-services.json
+          if [ -n "$DATA" ]; then
+            printf '%s' "$DATA" > app/google-services.json
+            echo "google-services.json 已写入"
+          else
+            echo "未设置 GOOGLE_SERVICES_JSON，跳过"
+          fi
 
       - name: Grant execute permission to gradlew
         run: chmod +x gradlew
